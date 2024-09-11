@@ -608,7 +608,7 @@ namespace Search {
 
     ttEntry->store(pos.key,
       bestScore >= beta ? TT::FLAG_LOWER : TT::FLAG_UPPER,
-      0, bestMove, bestScore, ss->staticEval, ttPV, ply);
+      0, bestMove, bestScore, uncorrectedStaticEval, ttPV, ply);
 
     return bestScore;
   }
@@ -1148,7 +1148,7 @@ namespace Search {
       bestScore = std::min(bestScore, maxScore);
 
     // update corrhist
-    const bool isCap = pos.board[move_to(move)] != NO_PIECE;
+    const bool isCap = pos.board[move_to(bestMove)] != NO_PIECE;
     if(!pos.checkers && (!bestMove || !isCap) 
         && !(bestScore >= beta && bestScore <= ss->staticEval) 
         && !(!bestMove && bestScore >= ss->staticEval)){
@@ -1166,7 +1166,7 @@ namespace Search {
       else
         flag = (IsPV && bestMove) ? TT::FLAG_EXACT : TT::FLAG_UPPER;
 
-      ttEntry->store(pos.key, flag, depth, bestMove, bestScore, ss->staticEval, ttPV, ply);
+      ttEntry->store(pos.key, flag, depth, bestMove, bestScore, uncorrectedStaticEval, ttPV, ply);
     }
 
     return bestScore;
