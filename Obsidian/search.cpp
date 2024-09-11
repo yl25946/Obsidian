@@ -1149,10 +1149,10 @@ namespace Search {
 
     // update corrhist
     const bool isCap = pos.board[move_to(move)] != NO_PIECE;
-    if(!pos.checkers && (!bestMove || isCap) 
+    if(!pos.checkers && (!bestMove || !isCap) 
         && !(bestScore >= beta && bestScore <= ss->staticEval) 
         && !(!bestMove && bestScore >= ss->staticEval)){
-        auto bonus = std::clamp<int>((bestScore - ss->staticEval) * depth / 8, 
+        auto bonus = std::clamp(static_cast<int>(bestScore - ss->staticEval) * depth / 8, 
                                       -CORRHIST_LIMIT / 4, CORRHIST_LIMIT /4);
 
         addToCorrhist(pawnCorrhist[pos.sideToMove][getPawnCorrhistIndex(pos.pawnKey)], bonus);
